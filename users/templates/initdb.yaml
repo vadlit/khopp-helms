@@ -1,0 +1,101 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}"
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: "{{ .Release.Name }}"
+      labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    spec:
+      restartPolicy: Never
+      initContainers:
+        - name: check-db-ready
+          image: postgres:latest
+          env:
+            - name: POSTGRES_HOST
+              value: {{ .Values.postgresql.postgresqlHost | quote }}
+            - name: POSTGRES_PORT
+              value: {{ .Values.postgresql.postgresqlPort | quote }}
+          command:
+            - sh
+            - "-c"
+            - |
+              until pg_isready -h $POSTGRES_HOST  -p  $POSTGRES_PORT;
+              do echo waiting for database; sleep 2; done;
+      containers:
+      - name: post-install-job
+        env:
+          - name: DATABASE_URI
+            value: {{ printf "postgresql://%s:%s@%s:%s/%s" .Values.postgresql.postgresqlUsername .Values.postgresql.postgresqlPassword .Values.postgresql.postgresqlHost .Values.postgresql.postgresqlPort .Values.postgresql.postgresqlDatabase  | quote }}
+        image: postgres:latest
+        command:
+          - sh
+          - "-c"
+          - |
+            psql $DATABASE_URI <<'EOF'
+              INSERT INTO public.users(
+                password, 
+                email, 
+                login, 
+                closing_date, 
+                activated_at, 
+                expired_at, 
+                created_at, 
+                updated_at,
+                state, 
+                email_status)
+                VALUES 
+                (
+                    '$2a$07$fUr48EgHmwk/RVJGrVaE2O8fdg8Oj0UZM/8XGDEsYc0ZsQN3nyh8m', 
+                    'gateway@khopp.online', 
+                    'gateway', 
+                    '2070-02-11', 
+                    NOW(), 
+                    '2070-02-11', 
+                    NOW(), 
+                    NOW(), 
+                    'CONFIRMED', 
+                    'VERIFIED'
+                ),
+                (
+                    '$2a$07$ujwNRDXSoGL3QXFHV0cgi.i1RO2BagpUATR2Tn/qDJtpZ6Jmi0kva', 
+                    'users@khopp.online', 
+                    'users', 
+                    '2070-02-11', 
+                    NOW(), 
+                    '2070-02-11', 
+                    NOW(), 
+                    NOW(), 
+                    'CONFIRMED', 
+                    'VERIFIED'
+                ),
+                (
+                    '$2a$07$iaurxBMwlBt5xKp0c7htg.lsOVjmVY8xk194HdH5fAEym0Tn8D3dS', 
+                    'routes@khopp.online', 
+                    'routes', 
+                    '2070-02-11', 
+                    NOW(), 
+                    '2070-02-11', 
+                    NOW(), 
+                    NOW(), 
+                    'CONFIRMED', 
+                    'VERIFIED'
+                );
+            EOF
+
+  backoffLimit: 0
