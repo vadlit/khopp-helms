@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: khopp.online/online.khopp.users
+  repository: khopp.online/online.khopp.poi
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   #tag: ""
@@ -58,11 +58,11 @@ tolerations: []
 affinity: {}
 
 postgresql:
-  postgresqlHost: "postgres-users"
+  postgresqlHost: "postgres-poi"
   postgresqlPort: "5432"
-  postgresqlDatabase: users
-  postgresqlUsername: users
-  postgresqlPassword: users 
+  postgresqlDatabase: routes
+  postgresqlUsername: routes
+  postgresqlPassword: routes 
 
 livenessProbe:
   enabled: true

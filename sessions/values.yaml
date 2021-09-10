@@ -35,18 +35,6 @@ service:
   - name: http-jmx
     containerPort: 9010
     protocol: TCP
-  
-ingress:
-  enabled: true
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1    
-  host: "{{ .Chart.Name }}-{{ .Release.Namespace }}.khopp.online.k8s"
-  #hosts:
-  #  - host: khopp.online.k8s
-  #    paths:
-  #    - path: /(.*)
-  tls: []  
-  #path: /  
 
 resources:
   limits:
