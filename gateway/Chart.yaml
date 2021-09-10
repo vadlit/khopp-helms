@@ -3,4 +3,4 @@ name: gateway
 description: the Gateway service
 type: application
 appVersion: latest  
-version: 0.0.9
+version: 0.0.10
