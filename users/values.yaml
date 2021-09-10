@@ -52,7 +52,7 @@ resources:
     memory: 4096M
     cpu: 4
   requests:
-    memory: 1280M
+    memory: 600M
     cpu: 0.1
 
 #autoscaling:
