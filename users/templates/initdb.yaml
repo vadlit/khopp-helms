@@ -43,6 +43,9 @@ spec:
           - name: DATABASE_URI
             value: {{ printf "postgresql://%s:%s@%s:%s/%s" .Values.postgresql.postgresqlUsername .Values.postgresql.postgresqlPassword .Values.postgresql.postgresqlHost .Values.postgresql.postgresqlPort .Values.postgresql.postgresqlDatabase  | quote }}
         image: postgres:latest
+        # NOTICE: you can use https://bcrypt-generator.com/ to generate hashes for the users below:
+        # - rounds must be 7
+        # - input string is like Pa55-gateway
         command:
           - sh
           - "-c"
@@ -82,6 +85,18 @@ spec:
                     NOW(), 
                     NOW(), 
                     'CONFIRMED', 
+                    'VERIFIED'
+                ),
+                (
+                    '$2a$07$QLVedwhPtBLZNzXuRxlju.B7DhlWjuEGf2ZHB4qj1YPS9szcIDOPC',
+                    'poi@khopp.online',
+                    'poi',
+                    '2070-02-11',
+                    NOW(),
+                    '2070-02-11',
+                    NOW(),
+                    NOW(),
+                    'CONFIRMED',
                     'VERIFIED'
                 ),
                 (
