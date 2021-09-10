@@ -60,9 +60,9 @@ affinity: {}
 postgresql:
   postgresqlHost: "postgres-poi"
   postgresqlPort: "5432"
-  postgresqlDatabase: routes
-  postgresqlUsername: routes
-  postgresqlPassword: routes 
+  postgresqlDatabase: poi
+  postgresqlUsername: poi
+  postgresqlPassword: poi
 
 livenessProbe:
   enabled: true
