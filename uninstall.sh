@@ -1,6 +1,6 @@
-./gateway/uninstall.sh
+./users/uninstall.sh
+./sessions/uninstall.sh
 ./poi/uninstall.sh
 ./routes/uninstall.sh
-./sessions/uninstall.sh
-./users/uninstall.sh
 ./userpurger/uninstall.sh
+./gateway/uninstall.sh

@@ -3,4 +3,4 @@ name: routes
 description: Routes service
 type: application
 appVersion: latest  
-version: 0.0.19
+version: 0.0.20
