@@ -186,6 +186,7 @@ spec:
               ),
               roles(role_name) as (
                  SELECT 'SERVICE'
+                 UNION SELECT 'USERS_ADMIN'
               )
                 INSERT INTO public.user_role(user_id, role_name)
                 SELECT id, role_name FROM inserted_id
