@@ -17,3 +17,6 @@ sleep 30
 echo "----"
 (cd users; ./install.sh)
 sleep 30
+
+echo "----"
+(cd userpurger; ./install.sh)
