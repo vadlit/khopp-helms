@@ -51,66 +51,182 @@ spec:
           - "-c"
           - |
             psql $DATABASE_URI <<'EOF'
-              INSERT INTO public.users(
-                password, 
-                email, 
-                login, 
-                closing_date, 
-                activated_at, 
-                expired_at, 
-                created_at, 
-                updated_at,
-                state, 
-                email_status)
-                VALUES 
-                (
-                    '$2a$07$fUr48EgHmwk/RVJGrVaE2O8fdg8Oj0UZM/8XGDEsYc0ZsQN3nyh8m', 
-                    'gateway@khopp.online', 
-                    'gateway', 
-                    '2070-02-11', 
-                    NOW(), 
-                    '2070-02-11', 
-                    NOW(), 
-                    NOW(), 
-                    'CONFIRMED', 
-                    'VERIFIED'
-                ),
-                (
-                    '$2a$07$ujwNRDXSoGL3QXFHV0cgi.i1RO2BagpUATR2Tn/qDJtpZ6Jmi0kva', 
-                    'users@khopp.online', 
-                    'users', 
-                    '2070-02-11', 
-                    NOW(), 
-                    '2070-02-11', 
-                    NOW(), 
-                    NOW(), 
-                    'CONFIRMED', 
-                    'VERIFIED'
-                ),
-                (
-                    '$2a$07$QLVedwhPtBLZNzXuRxlju.B7DhlWjuEGf2ZHB4qj1YPS9szcIDOPC',
-                    'poi@khopp.online',
-                    'poi',
-                    '2070-02-11',
-                    NOW(),
-                    '2070-02-11',
-                    NOW(),
-                    NOW(),
-                    'CONFIRMED',
-                    'VERIFIED'
-                ),
-                (
-                    '$2a$07$iaurxBMwlBt5xKp0c7htg.lsOVjmVY8xk194HdH5fAEym0Tn8D3dS', 
-                    'routes@khopp.online', 
-                    'routes', 
-                    '2070-02-11', 
-                    NOW(), 
-                    '2070-02-11', 
-                    NOW(), 
-                    NOW(), 
-                    'CONFIRMED', 
-                    'VERIFIED'
-                );
+              --- gateway
+              WITH inserted_id(id) as (
+                 INSERT INTO public.users(
+                              password,
+                              email,
+                              login,
+                              closing_date,
+                              activated_at,
+                              expired_at,
+                              created_at,
+                              updated_at,
+                              state,
+                              email_status)
+                              VALUES
+                              (
+                                  '$2a$07$fUr48EgHmwk/RVJGrVaE2O8fdg8Oj0UZM/8XGDEsYc0ZsQN3nyh8m',
+                                  'gateway@khopp.online',
+                                  'gateway',
+                                  '2070-02-11',
+                                  NOW(),
+                                  '2070-02-11',
+                                  NOW(),
+                                  NOW(),
+                                  'CONFIRMED',
+                                  'VERIFIED'
+                              )
+              	RETURNING id
+              ),
+              roles(role_name) as (
+                 SELECT 'SERVICE'
+              )
+              	INSERT INTO public.user_role(user_id, role_name)
+              	SELECT id, role_name FROM inserted_id
+              	JOIN roles on 1=1;
+
+              --- sessions
+              WITH inserted_id(id) as (
+                 INSERT INTO public.users(
+                              password,
+                              email,
+                              login,
+                              closing_date,
+                              activated_at,
+                              expired_at,
+                              created_at,
+                              updated_at,
+                              state,
+                              email_status)
+                              VALUES
+                              (
+                                  '$2a$07$P.aXRf04s7x7vl98JQLZ.OO7BRUeAz9GiERfThUK6ufCnZ7gqtLeO',
+                                  'sessions@khopp.online',
+                                  'sessions',
+                                  '2070-02-11',
+                                  NOW(),
+                                  '2070-02-11',
+                                  NOW(),
+                                  NOW(),
+                                  'CONFIRMED',
+                                  'VERIFIED'
+                              )
+              	RETURNING id
+              ),
+              roles(role_name) as (
+                 SELECT 'SERVICE'
+              )
+              	INSERT INTO public.user_role(user_id, role_name)
+              	SELECT id, role_name FROM inserted_id
+              	JOIN roles on 1=1;
+
+              --- users
+              WITH inserted_id(id) as (
+                 INSERT INTO public.users(
+                              password,
+                              email,
+                              login,
+                              closing_date,
+                              activated_at,
+                              expired_at,
+                              created_at,
+                              updated_at,
+                              state,
+                              email_status)
+                              VALUES
+                              (
+                                  '$2a$07$ujwNRDXSoGL3QXFHV0cgi.i1RO2BagpUATR2Tn/qDJtpZ6Jmi0kva',
+                                  'users@khopp.online',
+                                  'users',
+                                  '2070-02-11',
+                                  NOW(),
+                                  '2070-02-11',
+                                  NOW(),
+                                  NOW(),
+                                  'CONFIRMED',
+                                  'VERIFIED'
+                              )
+              	RETURNING id
+              ),
+              roles(role_name) as (
+                 SELECT 'SERVICE'
+              )
+              	INSERT INTO public.user_role(user_id, role_name)
+              	SELECT id, role_name FROM inserted_id
+              	JOIN roles on 1=1;
+
+              --- poi
+              WITH inserted_id(id) as (
+                 INSERT INTO public.users(
+                              password,
+                              email,
+                              login,
+                              closing_date,
+                              activated_at,
+                              expired_at,
+                              created_at,
+                              updated_at,
+                              state,
+                              email_status)
+                              VALUES
+                              (
+                                  '$2a$07$QLVedwhPtBLZNzXuRxlju.B7DhlWjuEGf2ZHB4qj1YPS9szcIDOPC',
+                                  'poi@khopp.online',
+                                  'poi',
+                                  '2070-02-11',
+                                  NOW(),
+                                  '2070-02-11',
+                                  NOW(),
+                                  NOW(),
+                                  'CONFIRMED',
+                                  'VERIFIED'
+                              )
+              	RETURNING id
+              ),
+              roles(role_name) as (
+                 SELECT 'SERVICE'
+                 UNION SELECT 'POI'
+              )
+              	INSERT INTO public.user_role(user_id, role_name)
+              	SELECT id, role_name FROM inserted_id
+              	JOIN roles on 1=1;
+
+              --- routes
+              WITH inserted_id(id) as (
+                 INSERT INTO public.users(
+                              password,
+                              email,
+                              login,
+                              closing_date,
+                              activated_at,
+                              expired_at,
+                              created_at,
+                              updated_at,
+                              state,
+                              email_status)
+                              VALUES
+                              (
+                                  '$2a$07$iaurxBMwlBt5xKp0c7htg.lsOVjmVY8xk194HdH5fAEym0Tn8D3dS',
+                                  'routes@khopp.online',
+                                  'routes',
+                                  '2070-02-11',
+                                  NOW(),
+                                  '2070-02-11',
+                                  NOW(),
+                                  NOW(),
+                                  'CONFIRMED',
+                                  'VERIFIED'
+                              )
+              	RETURNING id
+              ),
+              roles(role_name) as (
+                 SELECT 'SERVICE'
+                 UNION SELECT 'POI_READER'
+              )
+              	INSERT INTO public.user_role(user_id, role_name)
+              	SELECT id, role_name FROM inserted_id
+              	JOIN roles on 1=1;
             EOF
 
   backoffLimit: 0
