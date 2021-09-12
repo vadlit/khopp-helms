@@ -3,4 +3,4 @@ name: sessions
 description: Sessions service
 type: application
 appVersion: latest  
-version: 0.0.15
+version: 0.0.16
