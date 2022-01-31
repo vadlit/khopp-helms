@@ -1,3 +1,7 @@
+kubectl create namespace khopp
+kubectl config set-context --current --namespace=khopp
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/cloud/deploy.yaml
+
 echo "----"
 (cd users; ./install.sh)
 sleep 45

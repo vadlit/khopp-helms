@@ -156,42 +156,6 @@ spec:
               	SELECT id, role_name FROM inserted_id
               	JOIN roles on 1=1;
 
-              --- userpurger
-              WITH inserted_id(id) as (
-                 INSERT INTO public.users(
-                              password,
-                              email,
-                              login,
-                              closing_date,
-                              activated_at,
-                              expired_at,
-                              created_at,
-                              updated_at,
-                              state,
-                              email_status)
-                              VALUES
-                              (
-                                  '$2a$07$E3BOV3Rd6Vn.5Tz/AlTQlOzDRqiipvHBHNCgMDAKIz4DvYvklescy',
-                                  'userpurger@khopp.online',
-                                  'userpurger',
-                                  '2070-02-11',
-                                  NOW(),
-                                  '2070-02-11',
-                                  NOW(),
-                                  NOW(),
-                                  'CONFIRMED',
-                                  'VERIFIED'
-                              )
-                RETURNING id
-              ),
-              roles(role_name) as (
-                 SELECT 'SERVICE'
-                 UNION SELECT 'USERS_ADMIN'
-              )
-                INSERT INTO public.user_role(user_id, role_name)
-                SELECT id, role_name FROM inserted_id
-                JOIN roles on 1=1;
-
               --- poi
               WITH inserted_id(id) as (
                  INSERT INTO public.users(

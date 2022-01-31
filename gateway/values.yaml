@@ -38,7 +38,7 @@ service:
   
 ingress:
   enabled: true
-  host: "khopp.online.test"
+  host: "khopp.online.k8s"
   tls: []
 
 resources:
